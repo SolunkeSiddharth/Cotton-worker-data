@@ -4,6 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>🌾 Cotton Tracker</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon.png">
+  <meta name="theme-color" content="#6c7ae0"/>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
   <style>
@@ -95,6 +98,9 @@
       font-weight: bold;
       color: #444;
     }
+    .edit-btn {
+      background: #f0ad4e;
+    }
   </style>
 </head>
 <body>
@@ -128,6 +134,7 @@
       <th>KG</th>
       <th>Rate</th>
       <th>Total (₹)</th>
+      <th>Edit</th>
     </tr>
   </thead>
   <tbody></tbody>
@@ -136,7 +143,7 @@
 <div class="totals" id="summary"></div>
 
 <div style="text-align: center;">
-  <button class="pdf-btn" onclick="downloadPDF()">📥 Download PDF</button>
+  <button class="pdf-btn" onclick="downloadPDF()">📅 Download PDF</button>
 </div>
 
 <script>
@@ -183,13 +190,14 @@
     tbody.innerHTML = "";
     let totalKg = 0, totalAmt = 0;
 
-    entries.forEach(e => {
+    entries.forEach((e, i) => {
       const row = `<tr>
         <td>${formatDate(e.date)}</td>
-        <td>${e.name}</td>
-        <td>${e.kg}</td>
+        <td contenteditable oninput="entries[${i}].name = this.textContent">${e.name}</td>
+        <td contenteditable oninput="updateKG(${i}, this)">${e.kg}</td>
         <td>${e.rate}</td>
-        <td>${e.total.toFixed(2)}</td>
+        <td>${(e.kg * e.rate).toFixed(2)}</td>
+        <td><button class="edit-btn" onclick="renderTable()">✅</button></td>
       </tr>`;
       tbody.innerHTML += row;
       totalKg += e.kg;
@@ -200,6 +208,14 @@
       `Total Cotton: ${totalKg} KG | Total Amount: ₹${totalAmt.toFixed(2)}`;
   }
 
+  function updateKG(index, el) {
+    const newKg = evaluate(el.textContent);
+    if (!isNaN(newKg)) {
+      entries[index].kg = newKg;
+      entries[index].total = newKg * entries[index].rate;
+    }
+  }
+
   async function downloadPDF() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
@@ -207,14 +223,14 @@
     const date = document.getElementById("date").value;
     const rate = document.getElementById("rate").value;
     const formattedDate = formatDate(date);
-    const rateLabel = `Rate: ${parseFloat(rate).toFixed(2)} per KG`;
+    const rateLabel = `Rate: ₹${parseFloat(rate).toFixed(2)} per KG`;
 
     doc.setFontSize(16);
     doc.text("🌾 Cotton Worker Report", 14, 20);
 
     doc.setFontSize(10);
-    doc.text(`Date: ${formattedDate}`, 180, 15, { align: "right" });
-    doc.text(rateLabel, 180, 22, { align: "right" });
+    doc.text(`Date: ${formattedDate}`, 200, 15, { align: "right" });
+    doc.text(rateLabel, 200, 22, { align: "right" });
 
     doc.setFontSize(12);
     doc.setTextColor(80, 80, 80);
@@ -236,9 +252,15 @@
     doc.setFontSize(12);
     doc.setTextColor(0);
     doc.text(`Total Cotton: ${totalKg} KG`, 14, doc.lastAutoTable.finalY + 12);
-    doc.text(`Total Payout: ${totalAmt.toFixed(2)}`, 150, doc.lastAutoTable.finalY + 12, { align: "right" });
+    doc.text(`Total Payout: ₹${totalAmt.toFixed(2)}`, 200, doc.lastAutoTable.finalY + 12, { align: "right" });
 
     doc.save("cotton_report.pdf");
+  }
+
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('service-worker.js');
+    });
   }
 </script>
 
