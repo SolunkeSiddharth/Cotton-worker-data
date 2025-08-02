@@ -229,8 +229,8 @@
     doc.text("🌾 Cotton Worker Report", 14, 20);
 
     doc.setFontSize(10);
-    doc.text(`Date: ${formattedDate}`, 200, 15, { align: "right" });
-    doc.text(rateLabel, 200, 22, { align: "right" });
+    doc.text(`Date: ${formattedDate}`, 180, 15, { align: "right" });
+    doc.text(rateLabel, 180, 22, { align: "right" });
 
     doc.setFontSize(12);
     doc.setTextColor(80, 80, 80);
@@ -252,7 +252,7 @@
     doc.setFontSize(12);
     doc.setTextColor(0);
     doc.text(`Total Cotton: ${totalKg} KG`, 14, doc.lastAutoTable.finalY + 12);
-    doc.text(`Total Payout: ₹${totalAmt.toFixed(2)}`, 200, doc.lastAutoTable.finalY + 12, { align: "right" });
+    doc.text(`Total Payout: ₹${totalAmt.toFixed(2)}`, 170, doc.lastAutoTable.finalY + 12, { align: "right" });
 
     doc.save("cotton_report.pdf");
   }
