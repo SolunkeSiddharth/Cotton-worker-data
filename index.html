@@ -223,7 +223,7 @@
     const date = document.getElementById("date").value;
     const rate = document.getElementById("rate").value;
     const formattedDate = formatDate(date);
-    const rateLabel = `Rate: ₹${parseFloat(rate).toFixed(2)} per KG`;
+    const rateLabel = `Rate: ${parseFloat(rate).toFixed(2)} per KG`;
 
     doc.setFontSize(16);
     doc.text("🌾 Cotton Worker Report", 14, 20);
@@ -238,7 +238,7 @@
 
     doc.autoTable({
       startY: 30,
-      head: [['Date', 'Name', 'KG', 'Rate', 'Total ₹']],
+      head: [['Date', 'Name', 'KG', 'Rate', 'Total ']],
       body: entries.map(e => [
         formatDate(e.date), e.name, e.kg.toString(), e.rate.toFixed(2), e.total.toFixed(2)
       ]),
@@ -252,7 +252,7 @@
     doc.setFontSize(12);
     doc.setTextColor(0);
     doc.text(`Total Cotton: ${totalKg} KG`, 14, doc.lastAutoTable.finalY + 12);
-    doc.text(`Total Payout: ₹${totalAmt.toFixed(2)}`, 170, doc.lastAutoTable.finalY + 12, { align: "right" });
+    doc.text(`Total Payout: ${totalAmt.toFixed(2)}`, 170, doc.lastAutoTable.finalY + 12, { align: "right" });
 
     doc.save("cotton_report.pdf");
   }
