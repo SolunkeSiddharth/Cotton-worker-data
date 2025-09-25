@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cotton Worker Tracker</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <header class="app-header">
+            <h1>Cotton Worker Tracker</h1>
+        </header>
+
+        <!-- Tab Navigation -->
+        <nav class="tab-navigation">
+            <button class="tab-btn active" data-tab="current">Current Work</button>
+            <button class="tab-btn" data-tab="history">History</button>
+        </nav>
+
+        <!-- Current Work Tab -->
+        <div class="tab-content active" id="current-tab">
+            <div class="work-form">
+                <div class="form-group">
+                    <label class="form-label" for="work-date">Date</label>
+                    <input type="date" id="work-date" class="form-control">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="rate-per-kg">Rate per KG</label>
+                    <input type="number" id="rate-per-kg" class="form-control" placeholder="Enter rate per KG" step="0.01" min="0">
+                </div>
+
+                <div class="worker-entry-form">
+                    <h3>Add Worker Entry</h3>
+                    <div class="form-group">
+                        <label class="form-label" for="worker-name">Worker Name</label>
+                        <input type="text" id="worker-name" class="form-control" placeholder="Enter worker name">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="kg-collected">KG Collected</label>
+                        <input type="text" id="kg-collected" class="form-control" placeholder="e.g., 15+20+10 or 45">
+                    </div>
+                    
+                    <button type="button" class="btn btn--primary btn--full-width" id="add-worker-btn">Add Worker Entry</button>
+                </div>
+            </div>
+
+            <!-- Current Session Table -->
+            <div class="current-session">
+                <h3>Today's Entries</h3>
+                <div class="table-container">
+                    <table class="entries-table" id="current-entries-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>KG</th>
+                                <th>Total</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Dynamic content -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="session-summary">
+                    <div class="summary-item">
+                        <span class="summary-label">Total KG:</span>
+                        <span class="summary-value" id="current-total-kg">0</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Total Amount:</span>
+                        <span class="summary-value" id="current-total-amount">₹0</span>
+                    </div>
+                </div>
+                
+                <button type="button" class="btn btn--secondary btn--full-width" id="complete-day-btn">Complete Day</button>
+            </div>
+        </div>
+
+        <!-- History Tab -->
+        <div class="tab-content" id="history-tab">
+            <div class="history-header">
+                <h3>History Records</h3>
+                <button type="button" class="btn btn--outline btn--sm" id="generate-report-btn">Generate PDF Report</button>
+            </div>
+            
+            <div class="history-list" id="history-list">
+                <!-- Dynamic content -->
+            </div>
+        </div>
+
+        <!-- Loading Overlay -->
+        <div class="loading-overlay hidden" id="loading-overlay">
+            <div class="loading-spinner"></div>
+            <p>Processing...</p>
+        </div>
+
+        <!-- Confirmation Modal -->
+        <div class="modal hidden" id="confirm-modal">
+            <div class="modal-content">
+                <h4 id="confirm-title">Confirm Action</h4>
+                <p id="confirm-message">Are you sure you want to proceed?</p>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn--outline" id="confirm-cancel">Cancel</button>
+                    <button type="button" class="btn btn--primary" id="confirm-ok">Confirm</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit Modal -->
+        <div class="modal hidden" id="edit-modal">
+            <div class="modal-content">
+                <h4>Edit Entry</h4>
+                <div class="form-group">
+                    <label class="form-label" for="edit-name">Worker Name</label>
+                    <input type="text" id="edit-name" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="edit-kg">KG Collected</label>
+                    <input type="number" id="edit-kg" class="form-control" step="0.01" min="0">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn--outline" id="edit-cancel">Cancel</button>
+                    <button type="button" class="btn btn--primary" id="edit-save">Save Changes</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toast Notifications -->
+        <div class="toast hidden" id="toast">
+            <span id="toast-message"></span>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
