@@ -1181,7 +1181,7 @@ select.form-control {
   left: 50%;
   transform: translateX(-50%);
   background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
-  color: white;
+  
   padding: var(--space-12) var(--space-20);
   border-radius: var(--radius-lg);
   box-shadow: 0 4px 12px rgba(135, 206, 235, 0.3);
